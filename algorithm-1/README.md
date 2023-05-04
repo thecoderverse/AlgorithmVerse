@@ -1,6 +1,3 @@
-
-2. İlgili programlama dilindeki çözümleri çalıştırmak için gerekli derleyici/yorumlayıcıyı kullanarak, algoritma çözümlerini deneyin.
-
 ## HATIRLATMA
 
 Katkıda bulunmak istiyorsanız, lütfen aşağıdaki adımları takip edin:
