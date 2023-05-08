@@ -21,8 +21,8 @@ Verilen tahta üzerindeki puzzle durumuna göre, tahta durumunun çözülmesi i�
 
 ![image](https://user-images.githubusercontent.com/33912144/236757486-1de6785a-06a7-4d53-a7cb-3684a55b99b7.png)
 
-Girdi: board = [[1,2,3],[4,0,5]]
-Çıktı: 1
+Girdi: board = [[1,2,3],[4,0,5]]  <br />
+Çıktı: 1  <br />
 Açıklama: Bir hamlede 0 ve 5'i değiştirin.
 
 ![image](https://user-images.githubusercontent.com/33912144/236757638-1fe80d5a-d079-4c35-a2cb-0b31c292edf6.png)
