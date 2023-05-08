@@ -21,22 +21,23 @@ Verilen tahta üzerindeki puzzle durumuna göre, tahta durumunun çözülmesi i�
 
 ![image](https://user-images.githubusercontent.com/33912144/236757486-1de6785a-06a7-4d53-a7cb-3684a55b99b7.png)
 
-Girdi: board = [[1,2,3],[4,0,5]]  <br />
-Çıktı: 1  <br />
-Açıklama: Bir hamlede 0 ve 5'i değiştirin.
+**Girdi:** board = [[1,2,3],[4,0,5]]  <br />
+**Çıktı:** 1  <br />
+**Açıklama:** Bir hamlede 0 ve 5'i değiştirin.
 
 ![image](https://user-images.githubusercontent.com/33912144/236757638-1fe80d5a-d079-4c35-a2cb-0b31c292edf6.png)
 
-Girdi: board = [[1,2,3],[5,4,0]]
-Çıktı: -1
-Açıklama: Hiçbir hamle sayısı tahtayı çözülmüş hale getirmeyecektir.
+**Girdi:** board = [[1,2,3],[5,4,0]]  <br />
+**Çıktı:** -1  <br />
+**Açıklama:** Hiçbir hamle sayısı tahtayı çözülmüş hale getirmeyecektir.
 
 ![image](https://user-images.githubusercontent.com/33912144/236757814-d4944172-e8a2-4e91-b46b-e0cbfd36d06f.png)
 
-Girdi: board = [[4,1,2],[5,0,3]]
-Çıktı: 5
-Açıklama: 5, tahtayı çözen en küçük hamle sayısıdır.
-Bir örnek yol:
+**Girdi:** board = [[4,1,2],[5,0,3]]  <br />
+**Çıktı:** 5  <br />
+**Açıklama:** 5, tahtayı çözen en küçük hamle sayısıdır. <br />
+
+**Bir örnek yol:**
 
 1. hamleden sonra: [[4,1,2],[5,0,3]]
 2. hamleden sonra: [[4,1,2],[0,5,3]]
@@ -45,7 +46,7 @@ Bir örnek yol:
 5. hamleden sonra: [[1,2,0],[4,5,3]]
 6. hamleden sonra: [[1,2,3],[4,5,0]]
 
-## Kısıtlamalar:
+**Kısıtlamalar:**
 
 board.length == 2
 board[i].length == 3
