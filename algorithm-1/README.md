@@ -19,26 +19,28 @@ Tahta durumu, tahta [[1,2,3],[4,5,0]] olduğunda çözülmüş sayılır.
 
 Verilen tahta üzerindeki puzzle durumuna göre, tahta durumunun çözülmesi için gerekli en az hamle sayısını döndürün. Eğer tahta durumunun çözülmesi mümkün değilse, -1 döndürün.
 
-![image](https://user-images.githubusercontent.com/33912144/236757486-1de6785a-06a7-4d53-a7cb-3684a55b99b7.png)
+**Example 1** <br />
+![image](https://user-images.githubusercontent.com/33912144/236759855-be9a7d02-b0bf-4eec-8262-bef7fbbb6f47.png) 
 
 **Girdi:** board = [[1,2,3],[4,0,5]]  <br />
 **Çıktı:** 1  <br />
 **Açıklama:** Bir hamlede 0 ve 5'i değiştirin.
 
-![image](https://user-images.githubusercontent.com/33912144/236757638-1fe80d5a-d079-4c35-a2cb-0b31c292edf6.png)
+**Example 2** <br />
+![image](https://user-images.githubusercontent.com/33912144/236760008-a9bb6b19-9d01-4539-835d-f7c7c482bfd3.png)
 
 **Girdi:** board = [[1,2,3],[5,4,0]]  <br />
 **Çıktı:** -1  <br />
 **Açıklama:** Hiçbir hamle sayısı tahtayı çözülmüş hale getirmeyecektir.
 
-![image](https://user-images.githubusercontent.com/33912144/236757814-d4944172-e8a2-4e91-b46b-e0cbfd36d06f.png)
+**Example 3** <br />
+![image](https://user-images.githubusercontent.com/33912144/236760387-91dd8743-2cd3-4ca5-9a78-696151e119dd.png)
 
 **Girdi:** board = [[4,1,2],[5,0,3]]  <br />
 **Çıktı:** 5  <br />
 **Açıklama:** 5, tahtayı çözen en küçük hamle sayısıdır. <br />
 
 **Bir örnek yol:**
-
 1. hamleden sonra: [[4,1,2],[5,0,3]]
 2. hamleden sonra: [[4,1,2],[0,5,3]]
 3. hamleden sonra: [[0,1,2],[4,5,3]]
