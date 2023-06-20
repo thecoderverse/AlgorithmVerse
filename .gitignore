@@ -4,7 +4,5 @@
 
 /.vs
 *.sln
-/algorithm-1/C#/Solution-a1-3/obj/Release/net6.0
-/algorithm-1/C#/Solution-a1-3/obj/Debug/net6.0
-/algorithm-1/C#/Solution-a1-3/obj
-/algorithm-1/C#/Solution-a1-3/Solution-a1-3.csproj
+obj
+bin
