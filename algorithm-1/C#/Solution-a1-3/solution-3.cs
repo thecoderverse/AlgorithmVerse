@@ -10,14 +10,14 @@ Test("[[1,2,3],[5,4,0]]", -1);
 
 static void Test(string input, int expected)
 {    
-    Console.WriteLine("< Test >");
+    Console.WriteLine("<Test>");
     Game game = new(input);
     GameState resolvedState = game.GetSolution();
-    Console.WriteLine(resolvedState.ToString());
-    Console.WriteLine(resolvedState.Status.ToString());
-    Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
-    Console.WriteLine($"Test result {(resolvedState.StepCount == expected ? "passed" : "failed")}.");
-    Console.WriteLine("</ Test >");
+    Console.WriteLine("    last state:" + resolvedState.ToString());
+    Console.WriteLine("    " + resolvedState.Status.ToString());
+    Console.WriteLine($"    resolved in {resolvedState.StepCount} steps");
+    Console.WriteLine($"    Test result {(resolvedState.StepCount == expected ? "passed" : "failed")}.");
+    Console.WriteLine("</Test>");
 
 }
 
@@ -136,15 +136,33 @@ public class GameState
     {
         StringBuilder sb = new();
         sb.Append("[");
-        bool reapet = false;
+        bool isFirstRow = true;
         foreach (int[] row in Values)
         {
-            if (reapet)
+            if (isFirstRow)
+            {
+                sb.Append("[");
+            }
+            else
+            {
                 sb.Append(",");
-            sb.Append("[");
+                sb.Append("[");
+            }
+            isFirstRow = true;
+            bool isFirstNum = true;
             foreach (int val in row)
             {
-                sb.Append(val);
+
+                if (isFirstNum)
+                {
+                    sb.Append(val);
+                }
+                else
+                {
+                    sb.Append(",");
+                    sb.Append(val);
+                }
+                isFirstNum = false;
             }
             sb.Append("]");
         }
@@ -202,7 +220,6 @@ class Game
     /// <param name="initState"></param>
     public Game(string initState)
     {
-        Console.WriteLine("New Game:" + initState);
         int[][] initialState;
         initState = initState.Replace("[[", "");
         initState = initState.Replace("]]", "");
