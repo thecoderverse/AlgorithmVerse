@@ -4,10 +4,25 @@
 using System.Text;
 
 
-Test();
+Test1();
+Test2();
+Test3();
 
+static void Test1()
+{
+    Console.WriteLine("==============");
+    Console.WriteLine("Test2");
+    Console.WriteLine("_____");
+    int reqStepCount = 1;
+    Game game_2 = new("[[1,2,3],[4,0,5]]");
+    GameState resolvedState = game_2.GetSolution();
+    Console.WriteLine(resolvedState.ToString());
+    Console.WriteLine(resolvedState.Status.ToString());
+    Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
+    Console.WriteLine($"Test result {(resolvedState.StepCount == reqStepCount ? "passed" : "failed")}.");
+}
 
-static void Test()
+static void Test2()
 {
     Console.WriteLine("==============");
     Console.WriteLine("Test2");
@@ -17,10 +32,23 @@ static void Test()
     GameState resolvedState = game_2.GetSolution();
     Console.WriteLine(resolvedState.ToString());
     Console.WriteLine(resolvedState.Status.ToString());
-    Console.WriteLine($"resolved in {resolvedState.moveHist.Count} steps");
-    Console.WriteLine($"Test result {(resolvedState.moveHist.Count == reqStepCount ? "passed" : "failed")}.");
+    Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
+    Console.WriteLine($"Test result {(resolvedState.StepCount == reqStepCount ? "passed" : "failed")}.");
 }
 
+static void Test3()
+{
+    Console.WriteLine("==============");
+    Console.WriteLine("Test2");
+    Console.WriteLine("_____");
+    int reqStepCount = -1;
+    Game game_2 = new("[[1,2,3],[5,4,0]]");
+    GameState resolvedState = game_2.GetSolution();
+    Console.WriteLine(resolvedState.ToString());
+    Console.WriteLine(resolvedState.Status.ToString());
+    Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
+    Console.WriteLine($"Test result {(resolvedState.StepCount == reqStepCount ? "passed" : "failed")}.");
+}
 
 [Flags]
 public enum Movements
@@ -40,8 +68,25 @@ public enum StateStatus
 }
 public class GameState
 {
-    public static int RowNumber = 2;
-    public static int ColNumber = 3;
+    public static int rowNumber = 2;
+    public static int colNumber = 3;
+
+    int _stepCount;
+    public int StepCount
+    {
+        get
+        {
+            if(Status == StateStatus.FAILED)
+            {
+                return -1;
+            }
+            return _stepCount;
+        }
+        private set
+        {
+            _stepCount = value;
+        }
+    }
     public int[][] Values { get; set; }
     public int[] AddressOfVoid { get; set; } = new int[2];
     public Movements LastMovementFrom { get; set; }
@@ -57,9 +102,10 @@ public class GameState
     /// </remarks>
     /// <param name="initialState"></param>
     /// <param name="lastMovementFrom"></param>
-    public GameState(int[][] initialState, Movements lastMovementFrom, List<Movements> movesHistory)
+    public GameState(int[][] initialState, Movements lastMovementFrom, List<Movements> movesHistory, int t)
     {
         Status = StateStatus.IN_PROGRESS;
+        StepCount = t;
         Values = new int[initialState.Length][];
         LastMovementFrom = lastMovementFrom;
         moveHist = new();
@@ -113,6 +159,7 @@ public class GameState
                 break;
         }
         moveHist.Add(movement);
+        StepCount++;
     }
     public override string ToString()
     {
@@ -142,7 +189,7 @@ public class GameState
         {
             NextMovements |= Movements.TOP;
         }
-        if (row + 1 < RowNumber)
+        if (row + 1 < rowNumber)
         {
             NextMovements |= Movements.BOTTOM;
         }
@@ -150,7 +197,7 @@ public class GameState
         {
             NextMovements |= Movements.LEFT;
         }
-        if (col + 1 < ColNumber)
+        if (col + 1 < colNumber)
         {
             NextMovements |= Movements.RIGHT;
         }
@@ -158,9 +205,9 @@ public class GameState
     }
     private void _getAddressOfVoid()
     {
-        for (int i = 0; i < RowNumber; i++)
+        for (int i = 0; i < rowNumber; i++)
         {
-            for (int j = 0; j < ColNumber; j++)
+            for (int j = 0; j < colNumber; j++)
             {
                 if (Values[i][j] == 0)
                 {
@@ -176,7 +223,7 @@ class Game
     int rowNumber;
     int colNumber;
     GameState _initState;
-    public HashSet<string> stateHist { get; set; }
+    public Dictionary<string, int> stateHist { get; set; }
 
     /// <summary>
     /// init state as "n,n,n/n,n,n" or "[[n,n,n],[n,n,n]]"
@@ -221,14 +268,14 @@ class Game
     }
     public void SetState(int[][] initialState)
     {
-        rowNumber = GameState.RowNumber;
-        colNumber = GameState.ColNumber;
+        rowNumber = GameState.rowNumber;
+        colNumber = GameState.colNumber;
         if (!ValidateInput(initialState))
         {
             Console.WriteLine("Invalid game state as a starting point!");
             return;
         }
-        _initState = new GameState(initialState, Movements.NONE, new List<Movements>());
+        _initState = new GameState(initialState, Movements.NONE, new List<Movements>(), 0);
         stateHist = new();
     }
     public GameState GetSolution()
@@ -237,10 +284,18 @@ class Game
     }
     private GameState GetSolution(GameState state)
     {
-        if (!stateHist.Add(state.ToString()))
+        string stateToken = state.ToString();
+        if (!stateHist.TryAdd(stateToken, state.StepCount))
         {
-            state.Status = StateStatus.FAILED;
-            return state;
+            // This state has been passed before
+            // if this rout reaches this state by longer path, then this path is failed.
+            //  -> The other one is more closer to the solution then this branch, no need to continue on this rout
+            if(state.StepCount >= stateHist[stateToken])
+            {
+                state.Status = StateStatus.FAILED;
+                return state;
+            }
+            stateHist[stateToken] = state.StepCount;
         }
         if (_isSolved(state))
         {
@@ -248,53 +303,52 @@ class Game
             return state;
         }
         state.SetAvailableMovements();
-        List<GameState> newStates = new();
-        CheckMovement(state, Movements.LEFT, newStates);
-        CheckMovement(state, Movements.TOP, newStates);
-        CheckMovement(state, Movements.RIGHT, newStates);
-        CheckMovement(state, Movements.BOTTOM, newStates);
-        
+        List<GameState> nextStates = new();
+        CheckMovement(state, Movements.TOP, nextStates);
+        CheckMovement(state, Movements.BOTTOM, nextStates);
+        CheckMovement(state, Movements.RIGHT, nextStates);
+        CheckMovement(state, Movements.LEFT, nextStates);        
 
         GameState resolvedState = state;
         int count = int.MaxValue;
         bool successFound = false;
-        foreach (GameState newState in newStates)
+        foreach (GameState newState in nextStates)
         {
             GameState newResolvedState = GetSolution(newState);
             if (successFound == false && newResolvedState.Status == StateStatus.SUCCESS)
             {
                 successFound = true;
                 resolvedState = newResolvedState;
-                count = resolvedState.moveHist.Count;
+                count = resolvedState.StepCount;
             }
             else if (successFound && newResolvedState.Status == StateStatus.SUCCESS)
             {
-                if (newResolvedState.moveHist.Count < count)
+                if (newResolvedState.StepCount < count)
                 {
                     resolvedState = newResolvedState;
-                    count = resolvedState.moveHist.Count;
+                    count = resolvedState.StepCount;
                 }
             }
             else if(successFound == false)
             {
-                if (newResolvedState.moveHist.Count < count)
+                if (newResolvedState.StepCount < count)
                 {
                     resolvedState = newResolvedState;
-                    count = resolvedState.moveHist.Count;
+                    count = resolvedState.StepCount;
                 }
             }
         }
         return resolvedState;
     }
-    private void CheckMovement(GameState state, Movements movement, List<GameState> newStates)
+    private void CheckMovement(GameState state, Movements movement, List<GameState> nexStates)
     {
         // check availablity
         bool isMovementAvailable = state.NextMovements.HasFlag(movement);
-        if (isMovementAvailable == false) return;
+        if (!isMovementAvailable) return;
         // we return early if this movement is not available
         GameState _state;
-        _state = new GameState(state.Values, state.LastMovementFrom, state.moveHist);
-        newStates.Add(_state);
+        _state = new GameState(state.Values, state.LastMovementFrom, state.moveHist, state.StepCount);
+        nexStates.Add(_state);
 
         _state.Move(movement);
     }
