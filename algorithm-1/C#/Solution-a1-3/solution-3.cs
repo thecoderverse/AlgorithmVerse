@@ -9,16 +9,16 @@ Test("[[4,1,2],[5,0,3]]", 5);
 Test("[[1,2,3],[5,4,0]]", -1);
 
 static void Test(string input, int expected)
-{
-    Console.WriteLine("==============");
-    Console.WriteLine("Test2");
-    Console.WriteLine("_____");
+{    
+    Console.WriteLine("< Test >");
     Game game = new(input);
     GameState resolvedState = game.GetSolution();
     Console.WriteLine(resolvedState.ToString());
     Console.WriteLine(resolvedState.Status.ToString());
     Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
     Console.WriteLine($"Test result {(resolvedState.StepCount == expected ? "passed" : "failed")}.");
+    Console.WriteLine("</ Test >");
+
 }
 
 [Flags]
