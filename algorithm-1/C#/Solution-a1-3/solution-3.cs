@@ -4,50 +4,21 @@
 using System.Text;
 
 
-Test1();
-Test2();
-Test3();
+Test("[[1,2,3],[4,0,5]]", 1);
+Test("[[4,1,2],[5,0,3]]", 5);
+Test("[[1,2,3],[5,4,0]]", -1);
 
-static void Test1()
+static void Test(string input, int expected)
 {
     Console.WriteLine("==============");
     Console.WriteLine("Test2");
     Console.WriteLine("_____");
-    int reqStepCount = 1;
-    Game game_2 = new("[[1,2,3],[4,0,5]]");
-    GameState resolvedState = game_2.GetSolution();
+    Game game = new(input);
+    GameState resolvedState = game.GetSolution();
     Console.WriteLine(resolvedState.ToString());
     Console.WriteLine(resolvedState.Status.ToString());
     Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
-    Console.WriteLine($"Test result {(resolvedState.StepCount == reqStepCount ? "passed" : "failed")}.");
-}
-
-static void Test2()
-{
-    Console.WriteLine("==============");
-    Console.WriteLine("Test2");
-    Console.WriteLine("_____");
-    int reqStepCount = 5;
-    Game game_2 = new("[[4,1,2],[5,0,3]]");
-    GameState resolvedState = game_2.GetSolution();
-    Console.WriteLine(resolvedState.ToString());
-    Console.WriteLine(resolvedState.Status.ToString());
-    Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
-    Console.WriteLine($"Test result {(resolvedState.StepCount == reqStepCount ? "passed" : "failed")}.");
-}
-
-static void Test3()
-{
-    Console.WriteLine("==============");
-    Console.WriteLine("Test2");
-    Console.WriteLine("_____");
-    int reqStepCount = -1;
-    Game game_2 = new("[[1,2,3],[5,4,0]]");
-    GameState resolvedState = game_2.GetSolution();
-    Console.WriteLine(resolvedState.ToString());
-    Console.WriteLine(resolvedState.Status.ToString());
-    Console.WriteLine($"resolved in {resolvedState.StepCount} steps");
-    Console.WriteLine($"Test result {(resolvedState.StepCount == reqStepCount ? "passed" : "failed")}.");
+    Console.WriteLine($"Test result {(resolvedState.StepCount == expected ? "passed" : "failed")}.");
 }
 
 [Flags]
