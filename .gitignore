@@ -6,3 +6,5 @@
 *.sln
 obj
 bin
+*.exe
+.vscode
